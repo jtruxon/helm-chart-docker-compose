@@ -1,5 +1,13 @@
 apiVersion: v1
-appVersion: "1.0"
-description: deploys a web app defined in docker-compose.yml to Kubernetes
-name: docker-compose
-version: 0.1.2
+appVersion: 1.0.0
+description: cacti-based PoC for a template-based converter for docker-compose files
+name: catci-wrapped
+version: 0.1.6
+home: https://cacti.cmog.org/
+keywords:
+- testing
+maintainers:
+- email: truxonjm@cmog.org
+  name: truxonjm
+sources:
+- https://cacti.cmog.org/
