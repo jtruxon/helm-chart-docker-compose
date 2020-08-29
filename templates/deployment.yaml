@@ -1,5 +1,5 @@
 {{ $releaseName := .Release.Name }}
-apiVersion: apps/v1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: {{ $releaseName }}
@@ -36,10 +36,9 @@ spec:
         image: {{ $val.image }}
         imagePullPolicy: IfNotPresent
         env:
-        {{- range $envItem := $val.environment }}
-        {{- $envSplit := splitList "=" $envItem  }}
-         - name: "{{ $envSplit | first }}"
-           value: "{{ $envSplit | last }}"
+        {{- range $key, $value := $val.environment }}
+        - name: {{ $key }}
+          value: "{{ $value }}"
         {{-  end }}          
         ports:
         {{- range $k, $v := $val.ports }}
