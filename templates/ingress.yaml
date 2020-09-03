@@ -1,3 +1,4 @@
+{{- $composeFile := .Values -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -5,7 +6,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
 spec:
-{{- range $service, $val := .Values.services }}
+{{- range $service, $val := $composeFile.services }}
 {{- range $labelKey, $labelVal := $val.labels }}
 {{- if eq $labelKey "helm.docker-compose.tlsSecret" }}
   tls:

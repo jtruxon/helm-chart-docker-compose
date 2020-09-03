@@ -1,3 +1,4 @@
+{{- $composeFile := .Values -}}
 {{ $releaseName := .Release.Name }}
 apiVersion: apps/v1
 kind: Deployment
@@ -6,8 +7,7 @@ metadata:
   labels:
     app: {{ $releaseName }}
 spec:
-  
-  {{- range $service, $val := .Values.services }}
+  {{- range $service, $val := $composeFile.services }}
   {{- range $labelKey, $labelVal := $val.labels }}
   {{- if eq $labelKey "helm.docker-compose.replicas" }}
   replicas: {{ $labelVal }}
@@ -22,7 +22,7 @@ spec:
       labels:
         app: {{ $releaseName }}
     spec:
-      {{- range $service, $val := .Values.services }}
+      {{- range $service, $val := $composeFile.services }}
       {{- range $labelKey, $labelVal := $val.labels }}
       {{- if eq $labelKey "helm.docker-compose.imagePullSecret" }}
       imagePullSecrets:
@@ -31,7 +31,7 @@ spec:
       {{- end}}
       {{- end}}      
       containers:
-      {{- range $service, $val := .Values.services }}      
+      {{- range $service, $val := $composeFile.services }}      
       - name: {{ $service }}
         image: {{ $val.image }}
         imagePullPolicy: IfNotPresent
@@ -40,11 +40,13 @@ spec:
         {{- $envSplit := splitList "=" $envItem  }}
          - name: "{{ $envSplit | first }}"
            value: "{{ $envSplit | last }}"
-        {{-  end }}          
+        {{-  end }}  
+        {{ if $val.ports }}        
         ports:
         {{- range $k, $v := $val.ports }}
           - containerPort: {{ splitList ":" $v | last }}
         {{- end }}
+        {{-  end }}  
         {{- range $key, $value := $val.labels }}
         {{- if eq $key "helm.docker-compose.healthcheck" }}
         livenessProbe:

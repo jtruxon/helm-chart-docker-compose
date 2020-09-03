@@ -1,6 +1,9 @@
 
 VALUES_FILE="${1:-values.yaml}"
 
+echo "unlocking..."
+source ./git-unlock.sh
+
 echo "packaging:"
 cp $VALUES_FILE values.yaml 2>nul
 helm package .  --destination "/mnt/c/Dropbox/Root/Development/BitBucket/Helm/catalog/packaged"
@@ -15,6 +18,10 @@ git add *
 
 git commit -m "index update"
 
+echo "committed, sleeping for a couple seconds..."
+sleep 5
+
+echo "pushing..."
 git push
 
 popd
