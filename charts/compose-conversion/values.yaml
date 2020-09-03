@@ -1,0 +1,2 @@
+compose: |
+    {{ (tpl (.Files.Get "docker-compose.yml") . | quote ) }}
