@@ -1,5 +1,9 @@
+
+VALUES_FILE="${1:-values.yaml}"
+
 echo "packaging:"
-helm package . --destination "/mnt/c/Dropbox/Root/Development/BitBucket/Helm/catalog/packaged"
+cp $VALUES_FILE values.yaml 2>nul
+helm package .  --destination "/mnt/c/Dropbox/Root/Development/BitBucket/Helm/catalog/packaged"
 
 pushd "/mnt/c/Dropbox/Root/Development/BitBucket/Helm/catalog"
 

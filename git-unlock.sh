@@ -1,0 +1,1 @@
+rm /mnt/c/Dropbox/Root/Development/BitBucket/Helm/catalog/.git/refs/remotes/origin/master.lock
