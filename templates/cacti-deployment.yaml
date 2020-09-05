@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml -c
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cacti
+  name: cacti
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cacti
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml -c
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: cacti
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          value: db
+        - name: DB_NAME
+          value: cacti_master
+        - name: DB_PASS
+          value: cactipassword
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_ROOT_PASS
+          value: rootpassword
+        - name: DB_USER
+          value: cactiuser
+        - name: INITIALIZE_DB
+          value: "1"
+        - name: TZ
+          value: America/Los_Angeles
+        image: smcline06/cacti
+        imagePullPolicy: ""
+        name: cacti
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        resources: {}
+        volumeMounts:
+        - mountPath: /cacti
+          name: cacti-data
+        - mountPath: /spine
+          name: cacti-spine
+        - mountPath: /backups
+          name: cacti-backups
+      hostname: cacti
+      restartPolicy: Always
+      serviceAccountName: ""
+      subdomain: cacti-main-sub
+      volumes:
+      - name: cacti-data
+        persistentVolumeClaim:
+          claimName: cacti-data
+      - name: cacti-spine
+        persistentVolumeClaim:
+          claimName: cacti-spine
+      - name: cacti-backups
+        persistentVolumeClaim:
+          claimName: cacti-backups
+status: {}
